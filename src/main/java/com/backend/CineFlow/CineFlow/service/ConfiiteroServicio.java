@@ -3,11 +3,13 @@ package com.backend.CineFlow.CineFlow.service;
 import com.backend.CineFlow.CineFlow.dto.ComboDTO;
 import com.backend.CineFlow.CineFlow.dto.PedidoDTO;
 import com.backend.CineFlow.CineFlow.dto.VerificacionDTO;
+import com.backend.CineFlow.CineFlow.event.TicketPaidEvent;
 import com.backend.CineFlow.CineFlow.model.Combo;
 import com.backend.CineFlow.CineFlow.model.Pedido;
 import com.backend.CineFlow.CineFlow.repository.ComboRepositorio;
 import com.backend.CineFlow.CineFlow.repository.PedidoRepositorio;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +18,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ConfiiteroServicio {
     
     private final ComboRepositorio comboRepositorio;
@@ -218,6 +222,37 @@ public class ConfiiteroServicio {
         
         Pedido pedidoActualizado = pedidoRepositorio.save(pedido);
         return modelMapper.map(pedidoActualizado, PedidoDTO.class);
+    }
+
+    public void iniciarPreparacionPorPago(@NonNull TicketPaidEvent event) {
+        Objects.requireNonNull(event, "event no puede ser null");
+
+        Long idUsuario = event.getIdUsuario();
+        if (idUsuario == null) {
+            log.warn("Ticket.Paid recibido sin idUsuario. eventId={}", event.getEventId());
+            return;
+        }
+
+        List<Pedido.EstadoPedido> estadosPendientes = Arrays.asList(
+            Pedido.EstadoPedido.PENDIENTE,
+            Pedido.EstadoPedido.CONFIRMADO
+        );
+
+        List<Pedido> pedidos = pedidoRepositorio.findByIdUsuarioAndEstadoIn(idUsuario, estadosPendientes);
+        if (pedidos.isEmpty()) {
+            log.info("Sin pedidos pendientes para idUsuario={} en eventId={}", idUsuario, event.getEventId());
+            return;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        for (Pedido pedido : pedidos) {
+            pedido.setEstado(Pedido.EstadoPedido.EN_PREPARACION);
+            pedido.setFechaActualizacion(now);
+        }
+
+        pedidoRepositorio.saveAll(pedidos);
+        log.info("Pedidos actualizados a EN_PREPARACION por Ticket.Paid. eventId={}, idUsuario={}, pedidos={}",
+            event.getEventId(), idUsuario, pedidos.size());
     }
     
     /**

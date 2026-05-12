@@ -30,136 +30,111 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
-        // Crear alimentos
+        // Crear alimentos basados en los snacks del frontend
         List<Alimento> alimentos = new ArrayList<>();
         
         alimentos.add(Alimento.builder()
-            .nombre("Palomitas Grandes")
-            .descripcion("Palomitas de maíz tostadas frescas")
-            .precio(3.99)
+            .nombre("Palomitas Medianas")
+            .descripcion("Palomitas de maíz tostadas frescas medianas")
+            .precio(5.99)
             .cantidadDisponible(100)
-            .categoria("Bebidas y Snacks")
+            .categoria("Snacks")
             .activo(true)
             .rutaImagen("/images/palomitas.jpg")
             .build());
 
         alimentos.add(Alimento.builder()
-            .nombre("Refresco Mediano")
-            .descripcion("Refrescos variados helados")
-            .precio(2.50)
+            .nombre("Refresco")
+            .descripcion("Bebida refrescante variada")
+            .precio(3.99)
             .cantidadDisponible(150)
-            .categoria("Bebidas y Snacks")
+            .categoria("Bebidas")
             .activo(true)
             .rutaImagen("/images/refresco.jpg")
             .build());
 
         alimentos.add(Alimento.builder()
-            .nombre("Hot Dog")
-            .descripcion("Hot dog clásico con toppings")
-            .precio(4.50)
+            .nombre("Palomitas Extra Grande")
+            .descripcion("Palomitas XL extra grandes para compartir")
+            .precio(7.99)
             .cantidadDisponible(80)
-            .categoria("Comida Rápida")
+            .categoria("Snacks")
+            .activo(true)
+            .rutaImagen("/images/palomitas-xl.jpg")
+            .build());
+
+        alimentos.add(Alimento.builder()
+            .nombre("Dulce")
+            .descripcion("Caramelos y chocolates surtidos")
+            .precio(4.99)
+            .cantidadDisponible(120)
+            .categoria("Dulces")
+            .activo(true)
+            .rutaImagen("/images/dulces.jpg")
+            .build());
+
+        alimentos.add(Alimento.builder()
+            .nombre("Hot Dog")
+            .descripcion("Hot dog clásico con toppings variados")
+            .precio(5.99)
+            .cantidadDisponible(60)
+            .categoria("Snacks Salados")
             .activo(true)
             .rutaImagen("/images/hotdog.jpg")
             .build());
 
         alimentos.add(Alimento.builder()
-            .nombre("Nachos con Queso")
+            .nombre("Nachos")
             .descripcion("Nachos crujientes con queso derretido")
-            .precio(5.99)
-            .cantidadDisponible(60)
-            .categoria("Comida Rápida")
+            .precio(6.99)
+            .cantidadDisponible(70)
+            .categoria("Snacks Salados")
             .activo(true)
             .rutaImagen("/images/nachos.jpg")
-            .build());
-
-        alimentos.add(Alimento.builder()
-            .nombre("Caramelo de Azúcar")
-            .descripcion("Caramelo esponjoso surtido")
-            .precio(2.00)
-            .cantidadDisponible(200)
-            .categoria("Dulces")
-            .activo(true)
-            .rutaImagen("/images/caramelo.jpg")
-            .build());
-
-        alimentos.add(Alimento.builder()
-            .nombre("Chocolate Caliente")
-            .descripcion("Chocolate caliente cremoso")
-            .precio(3.50)
-            .cantidadDisponible(90)
-            .categoria("Bebidas Calientes")
-            .activo(true)
-            .rutaImagen("/images/chocolate.jpg")
             .build());
 
         // Guardar alimentos
         List<Alimento> alimentosGuardados = alimentoRepositorio.saveAll(alimentos);
         log.info("Se han creado {} alimentos", alimentosGuardados.size());
 
-        // Crear combos
+        // Crear combos basados en los snacks del frontend
         List<Combo> combos = new ArrayList<>();
 
-        // Combo 1: Película Clásica
+        // Combo 1: Combo Clásico (13.99)
         Combo combo1 = Combo.builder()
-            .nombre("Combo Película Clásica")
-            .descripcion("Palomitas grandes + Refresco mediano + Caramelo")
-            .precio(8.99)
-            .cantidadDisponible(50)
+            .nombre("Combo Clásico")
+            .descripcion("Palomitas + Bebida")
+            .precio(13.99)
+            .cantidadDisponible(80)
             .activo(true)
             .rutaImagen("/images/combo-clasico.jpg")
             .build();
-        combo1.setAlimentos(List.of(alimentosGuardados.get(0), alimentosGuardados.get(1), alimentosGuardados.get(4)));
+        combo1.setAlimentos(List.of(alimentosGuardados.get(0), alimentosGuardados.get(1)));
         combos.add(combo1);
 
-        // Combo 2: Película Deluxe
+        // Combo 2: Combo Premium (18.99)
         Combo combo2 = Combo.builder()
-            .nombre("Combo Película Deluxe")
-            .descripcion("Hot dog + Nachos con queso + Refresco mediano")
-            .precio(14.99)
-            .cantidadDisponible(40)
-            .activo(true)
-            .rutaImagen("/images/combo-deluxe.jpg")
-            .build();
-        combo2.setAlimentos(List.of(alimentosGuardados.get(2), alimentosGuardados.get(3), alimentosGuardados.get(1)));
-        combos.add(combo2);
-
-        // Combo 3: Premium
-        Combo combo3 = Combo.builder()
-            .nombre("Combo Película Premium")
-            .descripcion("Palomitas grandes + Hot dog + Nachos + Refresco + Chocolate")
-            .precio(19.99)
-            .cantidadDisponible(30)
+            .nombre("Combo Premium")
+            .descripcion("Palomitas XL + Bebida + Dulce")
+            .precio(18.99)
+            .cantidadDisponible(60)
             .activo(true)
             .rutaImagen("/images/combo-premium.jpg")
             .build();
-        combo3.setAlimentos(List.of(alimentosGuardados.get(0), alimentosGuardados.get(2), alimentosGuardados.get(3), 
-                                     alimentosGuardados.get(1), alimentosGuardados.get(5)));
+        combo2.setAlimentos(List.of(alimentosGuardados.get(2), alimentosGuardados.get(1), alimentosGuardados.get(3)));
+        combos.add(combo2);
+
+        // Combo 3: Snacks Salados (6.99) - Hot dog / Nachos
+        Combo combo3 = Combo.builder()
+            .nombre("Snacks Salados")
+            .descripcion("Hot dog / Nachos")
+            .precio(6.99)
+            .cantidadDisponible(70)
+            .activo(true)
+            .rutaImagen("/images/snacks-salados.jpg")
+            .build();
+        combo3.setAlimentos(List.of(alimentosGuardados.get(4), alimentosGuardados.get(5)));
         combos.add(combo3);
-
-        // Combo 4: Familia Pequeña
-        Combo combo4 = Combo.builder()
-            .nombre("Combo Familia Pequeña")
-            .descripcion("Palomitas 2x + Refresco 2x + Caramelo 2x")
-            .precio(16.99)
-            .cantidadDisponible(25)
-            .activo(true)
-            .rutaImagen("/images/combo-familia.jpg")
-            .build();
-        combo4.setAlimentos(List.of(alimentosGuardados.get(0), alimentosGuardados.get(1), alimentosGuardados.get(4)));
-        combos.add(combo4);
-
-        // Combo 5: Postre
-        Combo combo5 = Combo.builder()
-            .nombre("Combo Postre")
-            .descripcion("Caramelo + Chocolate caliente + Caramelo extra")
-            .precio(7.50)
-            .cantidadDisponible(35)
-            .activo(true)
-            .rutaImagen("/images/combo-postre.jpg")
-            .build();
-        combo5.setAlimentos(List.of(alimentosGuardados.get(4), alimentosGuardados.get(5)));
-        combos.add(combo5);
 
         // Guardar combos
         List<Combo> combosGuardados = comboRepositorio.saveAll(combos);
