@@ -1,11 +1,10 @@
 package com.backend.CineFlow.CineFlow.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
+ 
 import java.time.LocalDateTime;
 
 @Data
@@ -14,18 +13,14 @@ import java.time.LocalDateTime;
 @Builder
 public class PedidoDTO {
     
-    private long id;
-    @NotNull
-    @NonNull
+    private Long id;
     private String numeroTicket;
-    private long idUsuario;
-    private long comboId;
+    private Long idUsuario;
+    private Long comboId;
     private ComboDTO combo;
-    private int cantidad;
+    private Integer cantidad;
     private String estado;
-    private double precioTotal;
-    @NotNull
-    @NonNull
+    private Double precioTotal;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaActualizacion;
     private LocalDateTime fechaEntrega;

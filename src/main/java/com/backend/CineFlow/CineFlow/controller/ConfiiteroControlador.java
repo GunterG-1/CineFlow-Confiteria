@@ -4,6 +4,8 @@ import com.backend.CineFlow.CineFlow.dto.ComboDTO;
 import com.backend.CineFlow.CineFlow.dto.PedidoDTO;
 import com.backend.CineFlow.CineFlow.dto.VerificacionDTO;
 import com.backend.CineFlow.CineFlow.service.ConfiiteroServicio;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import java.util.Objects;
@@ -17,16 +19,14 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/confiteria")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Confitería", description = "Operaciones para menú, pedidos, verificación y estado de confitería")
 public class ConfiiteroControlador {
     
     private final ConfiiteroServicio confiiteroServicio;
     
-    /**
-     * GET /api/concessions/menu
-     * Obtiene los combos disponibles para compra anticipada
-     */
+   
     @GetMapping("/menu")
+    @Operation(summary = "Obtener menú", description = "Lista todos los combos disponibles en la confitería.")
     public ResponseEntity<List<ComboDTO>> obtenerMenu() {
         try {
             List<ComboDTO> combos = confiiteroServicio.obtenerMenu();
@@ -36,11 +36,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * GET /api/concessions/menu/disponibles
-     * Obtiene solo los combos con disponibilidad
-     */
+   
     @GetMapping("/menu/disponibles")
+    @Operation(summary = "Obtener combos disponibles", description = "Devuelve solo los combos con stock disponible.")
     public ResponseEntity<List<ComboDTO>> obtenerCombosDisponibles() {
         try {
             List<ComboDTO> combos = confiiteroServicio.obtenerCombosDisponibles();
@@ -50,11 +48,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * GET /api/concessions/menu/{id}
-     * Obtiene un combo específico por ID
-     */
+  
     @GetMapping("/menu/{id}")
+    @Operation(summary = "Obtener combo por id", description = "Busca un combo por su identificador.")
     public ResponseEntity<?> obtenerComboPorId(@PathVariable @NonNull Long id) {
         try {
             Objects.requireNonNull(id, "id no puede ser null");
@@ -66,11 +62,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * POST /api/concessions/orders
-     * Crea un nuevo pedido
-     */
+   
     @PostMapping("/ordenar")
+    @Operation(summary = "Crear pedido", description = "Crea un pedido de confitería a partir de un combo y cantidad.")
     public ResponseEntity<?> crearPedido(@RequestBody @NonNull PedidoDTO pedidoDTO) {
         try {
             Objects.requireNonNull(pedidoDTO, "pedidoDTO no puede ser null");
@@ -82,11 +76,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * GET /api/concessions/orders/{id}
-     * Obtiene los detalles de un pedido
-     */
+  
     @GetMapping("/order/{id}")
+    @Operation(summary = "Obtener pedido por id", description = "Consulta el detalle de un pedido de confitería.")
     public ResponseEntity<?> obtenerPedidoPorId(@PathVariable @NonNull Long id) {
         try {
             Objects.requireNonNull(id, "id no puede ser null");
@@ -98,11 +90,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * PATCH /api/concessions/orders/{id}/status
-     * Actualiza el estado del pedido a "En Preparación" o "Entregado" en la barra
-     */
+   
     @PatchMapping("/order/{id}/estado")
+    @Operation(summary = "Actualizar estado de pedido", description = "Cambia el estado de un pedido de confitería.")
     public ResponseEntity<?> actualizarEstadoPedido(
             @PathVariable @NonNull Long id,
             @RequestParam @NonNull String estado) {
@@ -117,11 +107,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * POST /api/concessions/verify
-     * Escaneo del ticket digital para asegurar la entrega correcta
-     */
+    
     @PostMapping("/verificar")
+    @Operation(summary = "Verificar ticket", description = "Valida un ticket digital para entrega de confitería.")
     public ResponseEntity<?> verificarTicket(@RequestParam @NonNull String numeroTicket) {
         try {
             Objects.requireNonNull(numeroTicket, "numeroTicket no puede ser null");
@@ -133,11 +121,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * GET /api/concessions/orders/usuario/{idUsuario}
-     * Obtiene los pedidos de un usuario
-     */
+    
     @GetMapping("/order/usuario/{idUsuario}")
+    @Operation(summary = "Pedidos por usuario", description = "Obtiene todos los pedidos de confitería de un usuario.")
     public ResponseEntity<List<PedidoDTO>> obtenerPedidosPorUsuario(@PathVariable @NonNull Long idUsuario) {
         try {
             Objects.requireNonNull(idUsuario, "idUsuario no puede ser null");
@@ -148,11 +134,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * GET /api/concessions/orders/estado/{estado}
-     * Obtiene los pedidos por estado
-     */
+ 
     @GetMapping("/order/estado/{estado}")
+    @Operation(summary = "Pedidos por estado", description = "Filtra pedidos de confitería por estado.")
     public ResponseEntity<?> obtenerPedidosPorEstado(@PathVariable @NonNull String estado) {
         try {
             Objects.requireNonNull(estado, "estado no puede ser null");
@@ -164,11 +148,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * DELETE /api/concessions/orders/{id}
-     * Cancela un pedido
-     */
+    
     @DeleteMapping("/order/{id}")
+    @Operation(summary = "Cancelar pedido", description = "Cancela un pedido de confitería si todavía es posible.")
     public ResponseEntity<?> cancelarPedido(@PathVariable @NonNull Long id) {
         try {
             Objects.requireNonNull(id, "id no puede ser null");
@@ -180,11 +162,9 @@ public class ConfiiteroControlador {
         }
     }
     
-    /**
-     * GET /api/concessions/health
-     * Verificar que el servicio está disponible
-     */
+   
     @GetMapping("/servicio")
+    @Operation(summary = "Estado del servicio", description = "Devuelve un pequeño healthcheck del microservicio de confitería.")
     public ResponseEntity<Map<String, String>> health() {
         Map<String, String> response = new HashMap<>();
         response.put("status", "UP");

@@ -1,3 +1,51 @@
+# CineFlow - Confitería (Microservicio)
+
+Descripción
+-----------
+Servicio que administra combos, pedidos de confitería y verificación de tickets.
+
+Ejecutar localmente
+-------------------
+Requisitos: Java 17, Maven, MySQL y RabbitMQ.
+
+```bash
+cd CineFlow-Confiteria
+./mvnw spring-boot:run
+```
+
+Propiedades
+- Puerto: `8083`.
+- Base de datos: configurar en `src/main/resources/application.properties`.
+
+Documentación API
+- Swagger UI: `http://localhost:8083/swagger-ui.html`
+
+Tests
+-----
+```bash
+./mvnw test
+```
+
+Notas
+-----
+- Inicializa datos de combos en el arranque si la BD está vacía.
+- Consume eventos `Ticket.Paid` para actualizar pedidos.
+# CineFlow-Confiteria
+
+Microservicio para gestión de productos de confitería (snacks, promociones).
+
+Ejecutar:
+
+```
+cd CineFlow-Confiteria
+./mvnw spring-boot:run
+```
+
+Construir:
+
+```
+./mvnw clean package
+```
 # CineFlow Confiteria
 
 Microservicio de confiteria para CineFlow, construido con Spring Boot, JPA y MySQL.
